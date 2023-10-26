@@ -46,6 +46,9 @@ The tests generate an HTML test report, which can be found in the project direct
 This project includes a GitHub Actions workflow that automates the testing process on each push, pull request, and a daily schedule. The workflow is configured in the .github/workflows directory.
 
 Push: The workflow is triggered automatically when changes are pushed to the main branch.
+
 Pull Request: It's also triggered when pull requests are created or updated.
+
 Scheduled Run: The workflow runs daily at midnight UTC to ensure regular testing.
+
 Manual Run: You can manually trigger the workflow using the "Run workflow" button in the GitHub Actions tab.

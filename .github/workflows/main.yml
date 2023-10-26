@@ -33,6 +33,13 @@ jobs:
         pip install -r requirements.txt
       working-directory: ${{ github.workspace }}
 
-    - name: Run tests
-      run: pytest -v tests/test_users.py
+    - name: Run tests and generate report
+      run: |
+        pytest -v tests/test_users.py --html=report.html
       working-directory: ${{ github.workspace }}
+
+    - name: Save test report as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-report
+        path: report.html

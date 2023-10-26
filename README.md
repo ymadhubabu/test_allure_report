@@ -27,14 +27,12 @@ Before you get started, ensure you have the following prerequisites:
 
 ## Installation
 
-1. Clone this repository to your local machine.
-
-```bash
 git clone https://github.com/yourusername/reqres-api-automation.git
 
 cd reqres-api-automation
 
 pip install -r requirements.txt
+
 
 ## Test execution
 

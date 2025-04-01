@@ -1,35 +1,27 @@
 pipeline {
     agent any 
     stages {
-        stage('Static Analysis') {
+        stage('install requirements') {
             steps {
-                echo 'Run the static analysis to the code' 
+                sh 'pip install requirements.txt' 
             }
         }
-        stage('Compile') {
+        stage('run tests') {
             steps {
-                echo 'Compile the source code' 
+                sh 'pytest -v -s tests/test_users.py --alluredir allure-results' 
             }
         }
-        stage('Security Check') {
+        stage('publish allure report') {
             steps {
-                echo 'Run the security check against the application' 
+                sh 'allure generate --single-file allure-results' 
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                emailext attachmentsPattern: 'allure-report/index.html', body: 'Pls find the attachment for test reports', subject: 'automation reports', to: 'ymadhubabu@gmail.com'
             }
-        }
-        stage('Run Unit Tests') {
+        }   
+        stage('email allure report') {
             steps {
-                echo 'Run unit tests from the source code' 
+                emailext attachmentsPattern: 'allure-report/index.html', body: 'Pls find the attachment for test reports', subject: 'automation reports', to: 'ymadhubabu@gmail.com'
             }
-        }
-        stage('Run Integration Tests') {
-            steps {
-                echo 'Run only crucial integration tests from the source code' 
-            }
-        }
-        stage('Publish Artifacts') {
-            steps {
-                echo 'Save the assemblies generated from the compilation' 
-            }
-        }
+        }   
     }
 }

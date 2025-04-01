@@ -1,29 +1,25 @@
 pipeline {
-    agent {
-        docker { image 'python:3' }
-    }
+    agent any
     stages {
-        stage('activate env') {
+        stage('Build') {
             steps {
-                sh 'pip3 install -r requirements.txt' 
+                script {
+                    docker.build('your-image-name')
+                }
             }
         }
-        stage('run tests') {
+        stage('Run') {
             steps {
-                sh 'pytest -v -s tests/test_users.py --alluredir allure-results' 
+                script {
+                    docker.image('your-image-name').inside {
+                        sh 'pytest -v -s tests/test_users.py --alluredir allure-results'
+                        sh 'allure generate --single-file allure-results' 
+                        allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                        emailext attachmentsPattern: 'allure-report/index.html', body: 'Pls find the attachment for test reports', subject: 'automation reports', to: 'ymadhubabu@gmail.com'
+                    }
+                }
             }
         }
-        stage('publish allure report') {
-            steps {
-                sh 'allure generate --single-file allure-results' 
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-                emailext attachmentsPattern: 'allure-report/index.html', body: 'Pls find the attachment for test reports', subject: 'automation reports', to: 'ymadhubabu@gmail.com'
-            }
-        }   
-        stage('email allure report') {
-            steps {
-                emailext attachmentsPattern: 'allure-report/index.html', body: 'Pls find the attachment for test reports', subject: 'automation reports', to: 'ymadhubabu@gmail.com'
-            }
-        }   
     }
-}
+
+    

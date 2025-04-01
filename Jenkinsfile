@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('activate env') {
             steps {
-                sh 'virtualenv venv && . venv/Scripts/activate.bat' 
+                sh '.venv/Scripts/activate.bat' 
             }
         }
         stage('run tests') {

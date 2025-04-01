@@ -1,9 +1,11 @@
 pipeline {
-    agent any 
+    agent {
+        docker { image 'python:3' }
+    }
     stages {
         stage('activate env') {
             steps {
-                sh 'source venv/Scripts/activate' 
+                sh 'pip3 install -r requirements.txt' 
             }
         }
         stage('run tests') {

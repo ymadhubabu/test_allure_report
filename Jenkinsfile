@@ -1,9 +1,9 @@
 pipeline {
     agent any 
     stages {
-        stage('install requirements') {
+        stage('activate env') {
             steps {
-                sh 'pip install -r requirements.txt' 
+                sh 'virtualenv venv && . venv/bin/activate' 
             }
         }
         stage('run tests') {
